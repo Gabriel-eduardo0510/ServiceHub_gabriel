@@ -1,0 +1,93 @@
+@baseUrl = http://localhost:8080
+@providerId = 1
+@clientId = 2
+@serviceId = 1
+@requestId = 1
+@reviewId = 1
+### Diagnóstico
+GET {{baseUrl}}/api/hello
+### Criar provider
+POST {{baseUrl}}/api/v1/users
+Content-Type: application/json
+
+{
+  "fullName": "Maria Silva",
+  "email": "maria.prestadora@example.com",
+  "password": "SenhaDemo123",
+  "role": "PROVIDER",
+  "active": true
+}
+### Criar client
+POST {{baseUrl}}/api/v1/users
+Content-Type: application/json
+
+{
+  "fullName": "João Souza",
+  "email": "joao.cliente@example.com",
+  "password": "SenhaDemo123",
+  "role": "CLIENT",
+  "active": true
+}
+### Criar service
+POST {{baseUrl}}/api/v1/services
+Content-Type: application/json
+
+{
+  "title": "Manutenção de computador",
+  "description": "Limpeza e diagnóstico",
+  "price": 150,
+  "category": "TECNOLOGIA",
+  "providerId": {{providerId}},
+  "active": true
+}
+### Criar request
+POST {{baseUrl}}/api/v1/service-requests
+Content-Type: application/json
+
+{
+  "serviceId": {{serviceId}},
+  "clientId": {{clientId}},
+  "status": "PENDING",
+  "notes": "Computador não liga"
+}
+### Avançar pedido para ACCEPTED
+PATCH {{baseUrl}}/api/v1/service-requests/{{requestId}}
+Content-Type: application/json
+
+{"status": "ACCEPTED"}
+### Avançar pedido para IN_PROGRESS
+PATCH {{baseUrl}}/api/v1/service-requests/{{requestId}}
+Content-Type: application/json
+
+{"status": "IN_PROGRESS"}
+### Avançar pedido para COMPLETED
+PATCH {{baseUrl}}/api/v1/service-requests/{{requestId}}
+Content-Type: application/json
+
+{"status": "COMPLETED"}
+### Avaliar pedido concluído
+POST {{baseUrl}}/api/v1/reviews
+Content-Type: application/json
+
+{
+  "requestId": {{requestId}},
+  "reviewerId": {{clientId}},
+  "rating": 5,
+  "comment": "Atendimento concluído"
+}
+### Filtrar e paginar ofertas
+GET {{baseUrl}}/api/v1/services?category=TECNOLOGIA&minPrice=100&maxPrice=200&page=0&size=5&sort=price,asc
+### Consultar avaliações
+GET {{baseUrl}}/api/v1/services/{{serviceId}}/reviews
+### Consultar pedidos do cliente
+GET {{baseUrl}}/api/v1/users/{{clientId}}/service-requests
+### Excluir registro da demonstração
+DELETE {{baseUrl}}/api/v1/reviews/{{reviewId}}
+### Excluir registro da demonstração
+DELETE {{baseUrl}}/api/v1/service-requests/{{requestId}}
+### Excluir registro da demonstração
+DELETE {{baseUrl}}/api/v1/services/{{serviceId}}
+### Excluir registro da demonstração
+DELETE {{baseUrl}}/api/v1/users/{{clientId}}
+### Excluir registro da demonstração
+DELETE {{baseUrl}}/api/v1/users/{{providerId}}
